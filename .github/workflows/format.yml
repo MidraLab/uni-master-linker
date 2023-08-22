@@ -1,0 +1,70 @@
+name: Format C#
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  dotnet-format:
+    env:
+      FOLDER_PATH: ./Assets/
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get branch info
+        id: comment-branch
+        uses: xt0rted/pull-request-comment-branch@v1.3.0
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Checkout repo
+        uses: actions/checkout@v2.4.2
+        with:
+          ref: ${{ steps.comment-branch.outputs.ref }}
+          persist-credentials: false
+
+      - name: Check latest commit message
+        id: log
+        run: echo "::set-output name=message::$(git log --no-merges -1 --oneline)"
+
+      - name: Check folder existence
+        id: check_folder
+        uses: andstor/file-existence-action@v1.1.0
+        with:
+          files: ${{ env.FOLDER_PATH }}
+
+      - name: Install dotnet-format
+        if: "!contains(steps.log.outputs.message, 'skip ci') && steps.check_folder.outputs.files_exists == 'true'"
+        run: |
+          rm -fr ./.config/dotnet-tools.json
+          dotnet new tool-manifest
+          dotnet tool install dotnet-format
+      - name: Check format
+        if: "!contains(steps.log.outputs.message, 'skip ci') && steps.check_folder.outputs.files_exists == 'true'"
+        id: check
+        uses: xt0rted/dotnet-format@v1.2.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          action: "check"
+          folder: ${{ env.FOLDER_PATH }}
+          fail-fast: false
+
+      - name: Run format
+        if: steps.check.outputs.has-changes == 'true'
+        uses: xt0rted/dotnet-format@v1.2.0
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          action: "fix"
+          folder: ${{ env.FOLDER_PATH }}
+
+      - name: Commit files
+        if: steps.check.outputs.has-changes == 'true'
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ./.config/dotnet-tools.json
+          git commit -a -m 'Automated dotnet-format update [skip ci]' -m 'Co-authored-by: ${{ github.event.pull_request.user.login }} <${{ github.event.pull_request.user.id }}+${{ github.event.pull_request.user.login }}@users.noreply.github.com>' || echo "No changes to commit"
+      - name: Push changes
+        if: steps.check.outputs.has-changes == 'true'
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          branch: ${{ steps.comment-branch.outputs.ref }}
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}

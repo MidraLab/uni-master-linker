@@ -1,0 +1,35 @@
+name: CheckMetaFiles
+
+env:
+  UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+  GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+# Controls when the action will run. 
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  meta-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout This Repository
+        uses: actions/checkout@v3.2.0
+        with:
+          submodules: false
+          lfs: true
+
+      - name: Meta File Check (github-hosted ubuntu-latest)
+        uses: DeNA/unity-meta-check@v3.1.2
+        with:
+          enable_junit: true
+          junit_xml_path: junit.xml
+          enable_pr_comment: true
+          pr_comment_lang: ja
+          pr_comment_send_success: true
+        
+      - uses: mikepenz/action-junit-report@v2
+        with:
+          report_paths: junit.xml
+        if: always()
