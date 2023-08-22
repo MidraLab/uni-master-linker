@@ -1,0 +1,15 @@
+{
+  "name": "com.midralab.uni-master-linker",
+  "displayName": "UniMasterLinker",
+  "version": "0.0.1",
+  "unity": "2022.3",
+  "description": "Sync and manage master data with Google Sheets and auto-generate Unity API classes.",
+
+  "keywords": [
+    "MasterData",
+    "google sheet"
+  ],
+
+  "dependencies": {
+  }
+}
