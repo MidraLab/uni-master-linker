@@ -1,20 +1,23 @@
 ﻿#if UNITY_EDITOR
+
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Cysharp.Threading.Tasks;
 using UniMasterLinker.Util;
 using UnityEditor;
 using UnityEngine;
 
-namespace UniMasterLinker.Editor
+namespace UniMasterLinker
 {
     /// <summary>
     ///     ゲームマスターのAPIクラスを更新するエディタ拡張
     /// </summary>
     public class UpdateGameMasterAPIClass : EditorWindow
     {
-        private const string DataRootPath = "/UniMasterLinker/Scripts/API/";
+        /// <summary>
+        /// 自動生成コードの保存先
+        /// </summary>
+        private const string GeneratedCodeDirectory = "/UniMasterLinker/Scripts/API/";
 
         /// <summary>
         ///     APIクラスの更新
@@ -52,7 +55,7 @@ namespace UniMasterLinker.Editor
         /// <param name="content"></param>
         private static void CreateScript(string path, string content)
         {
-            path = Application.dataPath + "/" + path;
+            path = Application.dataPath + GeneratedCodeDirectory + "/" + path;
 
             using (var writer = new StreamWriter(path, false))
             {
