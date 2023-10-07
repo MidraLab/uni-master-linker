@@ -1,12 +1,11 @@
 ﻿#if UNITY_EDITOR
-
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UniMasterLinker.API;
-using UniMasterLinker.Util;
+using UniMasterLinker.DataObject;
 using UnityEditor;
 
-namespace UniMasterLinker.Editor
+namespace UniMasterLinker
 {
     /// <summary>
     ///     ゲームデータオブジェクトの更新
@@ -26,7 +25,7 @@ namespace UniMasterLinker.Editor
         }
 
         /// <summary>
-        ///     ゲームデータオブジェクトの更新
+        ///     ゲームデータオブジェクトの更新(外部から呼び出し用)
         /// </summary>
         /// <param name="token"></param>
         public static async UniTask UpdateDataObject(CancellationToken token)
@@ -59,7 +58,7 @@ namespace UniMasterLinker.Editor
         /// <typeparam name="T"></typeparam>
         private static DataObjectBase<T> UpdateDataObject<T>(ResponseBase<T> responseBase)
         {
-            var data = AssetDatabase.LoadAssetAtPath<DataObjectBase<T>>(Constant.Constant.DataObjectPath +
+            var data = AssetDatabase.LoadAssetAtPath<DataObjectBase<T>>(Constant.DataObjectPath +
                                                                         GetDataObjectName(responseBase));
             data.SetData(responseBase.gameInfo);
 
