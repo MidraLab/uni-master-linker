@@ -1,3 +1,11 @@
+<!-- TOC -->
+* [UniMasterLinker](#unimasterlinker)
+  * [Import Method](#import-method)
+  * [How to Use](#how-to-use)
+  * [Supported Platforms](#supported-platforms)
+  * [License](#license)
+* [Dependencies](#dependencies)
+<!-- TOC -->
 
 # UniMasterLinker
 UniMasterLinker is a Unity editor extension that synchronizes master data between Google Sheets and Unity and automatically generates API classes.
@@ -25,3 +33,12 @@ All platforms supported by Unity are supported, as UniMasterLinker is written in
 
 ## License
 [MIT License](https://github.com/MidraLab/uni-master-liker/blob/main/LICENSE)
+
+## Dependencies
+To use UniMasterLinker, the following dependencies are required:
+
+* UniTask: A library for easier handling of asynchronous operations. It can be installed from https://github.com/Cysharp/UniTask.git.
+
+* Newtonsoft.Json: Used for processing JSON data. Install via Unity's PackageManager.
+
+These dependencies are necessary to fully utilize the features offered by UniMasterLinker.
