@@ -37,6 +37,13 @@ All platforms supported by Unity are supported, as UniMasterLinker is written in
 ## Dependencies
 To use UniMasterLinker, the following dependencies are required:
 
+add to Packages/manifest.json
+
+```json
+"com.unity.nuget.newtonsoft-json": "3.2.1",
+"com.cysharp.unitask": "2.5.0",
+```
+
 * UniTask: A library for easier handling of asynchronous operations. It can be installed from https://github.com/Cysharp/UniTask.git.
 
 * Newtonsoft.Json: Used for processing JSON data. Install via Unity's PackageManager.
