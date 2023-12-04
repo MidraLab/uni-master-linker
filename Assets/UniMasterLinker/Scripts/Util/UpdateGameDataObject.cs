@@ -3,7 +3,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UniMasterLinker.API;
-using UniMasterLinker.Util;
+using UniMasterLinker.DataObject;
 using UnityEditor;
 
 namespace UniMasterLinker.Editor
