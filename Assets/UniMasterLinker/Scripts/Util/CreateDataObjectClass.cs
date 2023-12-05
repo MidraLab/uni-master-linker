@@ -65,7 +65,7 @@ using UnityEngine;
 
 namespace UniMasterLinker.DataObject
 {{
-    [CreateAssetMenu(fileName = ""{className}"", menuName = ""UniMasterLinker/{className}"", order = 0)]
+    [CreateAssetMenu(fileName = ""{className}DataObject"", menuName = ""UniMasterLinker/{className}DataObject"", order = 0)]
     public class {className}DataObject : DataObjectBase<{className}Data>
     {{
         
