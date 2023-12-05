@@ -1,4 +1,4 @@
-namespace UniMasterLinker
+namespace UniMasterLinker.Constant
 {
     public static class Constant
     {

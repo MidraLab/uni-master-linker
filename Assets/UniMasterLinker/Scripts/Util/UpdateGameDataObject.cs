@@ -37,7 +37,7 @@ namespace UniMasterLinker
         /// <typeparam name="T"></typeparam>
         private static DataObjectBase<T> UpdateDataObject<T>(ResponseBase<T> responseBase)
         {
-            var data = AssetDatabase.LoadAssetAtPath<DataObjectBase<T>>(Constant.DataObjectPath +
+            var data = AssetDatabase.LoadAssetAtPath<DataObjectBase<T>>(Constant.Constant.DataObjectPath +
                                                                         GetDataObjectName(responseBase));
             data.SetData(responseBase.gameInfo);
 
