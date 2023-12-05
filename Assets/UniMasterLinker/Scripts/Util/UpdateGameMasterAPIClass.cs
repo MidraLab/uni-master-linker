@@ -1,36 +1,20 @@
-﻿#if UNITY_EDITOR
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Text;
+using UniMasterLinker.Scripts.Util;
 using UniMasterLinker.Util;
-using UnityEditor;
-using UnityEngine;
 
 namespace UniMasterLinker.Editor
 {
     /// <summary>
     ///     ゲームマスターのAPIクラスを更新するエディタ拡張
     /// </summary>
-    public class UpdateGameMasterAPIClass : EditorWindow
+    public class UpdateGameMasterAPIClass
     {
+        /// <summary>
+        ///    APIクラスの作成パス
+        /// </summary>
         private const string DataRootPath = "/UniMasterLinker/Scripts/API/";
 
-        /// <summary>
-        ///     APIクラスの更新
-        /// </summary>
-        [MenuItem("UniMasterLinker/APIクラスの更新")]
-        private static async void UpdateAPIClassFile()
-        {
-            // 実装例
-            // var playerGameInfo = GoogleSheetUtil.GetGameInfo(Constant.Constant.GameMasterSheetURL,
-            //     Constant.Constant.PlayerSheetName);
-            //
-            // var (playerPramJson) =
-            //     await UniTask.WhenAll(playerGameInfo);
-            //
-            // // プレイヤーの初期パラメータAPIクラスを生成
-            // CreateParamAPIClassFile(playerPramJson, Constant.Constant.PlayerSheetName);
-        }
 
         /// <summary>
         /// パラメータのAPIクラスの作成
@@ -41,25 +25,9 @@ namespace UniMasterLinker.Editor
         {
             var paramString = CreateParameterContents(paramJson);
             var scriptContent = CreateScriptContent(fileName, paramString);
-            CreateScript(fileName, scriptContent);
+            GenerateClassUtil.CreateScript(fileName, scriptContent, DataRootPath);
         }
 
-        /// <summary>
-        ///     スクリプトファイルを生成
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="content"></param>
-        private static void CreateScript(string path, string content)
-        {
-            path = Application.dataPath + "/" + DataRootPath +"/" + path + ".cs";
-
-            using (var writer = new StreamWriter(path, false))
-            {
-                writer.WriteLine(content);
-            }
-
-            AssetDatabase.Refresh();
-        }
 
         /// <summary>
         ///     スクリプトの内容を生成
@@ -73,6 +41,7 @@ namespace UniMasterLinker.Editor
 // このコードは自動生成されたものです。手動で編集しないでください。
 using System.Collections.Generic;
 using UnityEngine;
+using UniMasterLinker.API;
 
 namespace API
 {{
@@ -118,7 +87,7 @@ namespace API
             IReadOnlyList<string> descriptions)
         {
             var parameterString = new StringBuilder();
-            
+
             for (var keyIndex = 0; keyIndex < keys.Count; keyIndex++)
             {
                 var key = keys[keyIndex];
@@ -136,7 +105,7 @@ namespace API
                 {
                     parameterString.Append(
                         $"\t\t{summaryString}        public {types[keyIndex]} " +
-                                           key + ";");
+                        key + ";");
                 }
                 else
                 {
@@ -150,4 +119,3 @@ namespace API
         }
     }
 }
-#endif
