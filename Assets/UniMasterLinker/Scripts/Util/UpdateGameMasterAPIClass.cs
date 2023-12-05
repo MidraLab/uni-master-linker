@@ -51,7 +51,7 @@ namespace UniMasterLinker.Editor
         /// <param name="content"></param>
         private static void CreateScript(string path, string content)
         {
-            path = Application.dataPath + "/" + path;
+            path = Application.dataPath + "/" + DataRootPath +"/" + path + ".cs";
 
             using (var writer = new StreamWriter(path, false))
             {
