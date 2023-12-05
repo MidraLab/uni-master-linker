@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 using UniMasterLinker.Scripts.Util;
 using UniMasterLinker.Util;
 
-namespace UniMasterLinker.Editor
+namespace UniMasterLinker
 {
     /// <summary>
     ///     ゲームマスターのAPIクラスを更新するエディタ拡張
@@ -27,7 +27,6 @@ namespace UniMasterLinker.Editor
             var scriptContent = CreateScriptContent(fileName, paramString);
             GenerateClassUtil.CreateScript(fileName, scriptContent, DataRootPath);
         }
-
 
         /// <summary>
         ///     スクリプトの内容を生成

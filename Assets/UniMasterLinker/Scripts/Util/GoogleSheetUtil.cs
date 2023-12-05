@@ -9,6 +9,9 @@ using UnityEngine.Networking;
 
 namespace UniMasterLinker.Util
 {
+    /// <summary>
+    ///    GoogleSheet(GAS)のユーティリティ
+    /// </summary>
     public static class GoogleSheetUtil
     {
         /// <summary>
@@ -47,11 +50,12 @@ namespace UniMasterLinker.Util
         /// </summary>
         /// <param name="url"></param>
         /// <param name="sheetName"></param>
+        /// <param name="token"></param>
         /// <returns></returns>
-        public static async UniTask<string> GetGameInfo(string url, string sheetName)
+        public static async UniTask<string> GetGameInfo(string url, string sheetName,CancellationToken token)
         {
             var request = UnityWebRequest.Get($"{url}?sheetName={sheetName}");
-            await request.SendWebRequest();
+            await request.SendWebRequest().WithCancellation(token);
             if (request.result is UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.ProtocolError
                 or UnityWebRequest.Result.DataProcessingError)
             {
@@ -72,9 +76,9 @@ namespace UniMasterLinker.Util
         ///     マスターデータのキーの文字列を取得
         /// </summary>
         /// <returns></returns>
-        public static List<string> GetParameterKeyList(string json)
+        public static List<string> GetParameterKeyList(string paramJsonStr)
         {
-            var parseJson = JObject.Parse(json);
+            var parseJson = JObject.Parse(paramJsonStr);
             var gameInfoArray = (JArray)parseJson["gameInfo"];
             var gameInfo = (JObject)gameInfoArray?[0];
 
@@ -84,11 +88,11 @@ namespace UniMasterLinker.Util
         /// <summary>
         ///     マスターデータのパラメータのタイプの取得
         /// </summary>
-        /// <param name="json"></param>
+        /// <param name="paramJsonStr"></param>
         /// <returns></returns>
-        public static List<string> GetParameterTypeList(string json)
+        public static List<string> GetParameterTypeList(string paramJsonStr)
         {
-            var parseJson = JObject.Parse(json);
+            var parseJson = JObject.Parse(paramJsonStr);
             var gameInfoArray = (JArray)parseJson["gameInfo"];
             var gameInfo = (JObject)gameInfoArray?[0];
 
@@ -98,11 +102,11 @@ namespace UniMasterLinker.Util
         /// <summary>
         ///     マスターデータのパラメータの説明の取得
         /// </summary>
-        /// <param name="json"></param>
+        /// <param name="paramJsonStr"></param>
         /// <returns></returns>
-        public static List<string> GetParameterDescriptionList(string json)
+        public static List<string> GetParameterDescriptionList(string paramJsonStr)
         {
-            var parseJson = JObject.Parse(json);
+            var parseJson = JObject.Parse(paramJsonStr);
             var gameInfoArray = (JArray)parseJson["gameInfo"];
             var gameInfo = (JObject)gameInfoArray?[0];
 
@@ -112,13 +116,18 @@ namespace UniMasterLinker.Util
         /// <summary>
         ///     マスタデータのjsonをAPIをScriptableObjectに変換できる形に変換する
         /// </summary>
-        /// <param name="json"></param>
+        /// <param name="paramJsonStr"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        private static T ConvertGameInfo<T>(string json)
+        private static T ConvertGameInfo<T>(string paramJsonStr)
         {
-            var parsedJson = JObject.Parse(json);
+            var parsedJson = JObject.Parse(paramJsonStr);
             var gameInfoArray = (JArray)parsedJson["gameInfo"];
+
+            if (gameInfoArray == null)
+            {
+                throw new NullReferenceException("gameInfoArray is null");
+            }
 
             // Create a new JSON array to hold the converted objects
             var finalArray = new JArray();
