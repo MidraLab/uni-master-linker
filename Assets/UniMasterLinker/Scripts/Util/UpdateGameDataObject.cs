@@ -5,7 +5,7 @@ using UniMasterLinker.API;
 using UniMasterLinker.DataObject;
 using UnityEditor;
 
-namespace UniMasterLinker
+namespace UniMasterLinker.Util
 {
     /// <summary>
     ///     ゲームデータオブジェクトの更新
@@ -19,11 +19,6 @@ namespace UniMasterLinker
         public static async UniTask UpdateDataObject(CancellationToken token)
         {
             // 実装例
-            // var enemyResponse = GoogleSheetUtil.GetGameInfo<EnemyResponse>(Constant.Constant.GameMasterSheetURL,
-            //     Constant.Constant.EnemySheetName, token);
-            // var enemy = await UniTask.WhenAll(enemyResponse);
-            //
-            // UpdateDataObject(enemy);
 
             // ゲームデータオブジェクトの更新
             AssetDatabase.SaveAssets();

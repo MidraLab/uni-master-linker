@@ -1,5 +1,8 @@
-﻿using System.Threading;
+﻿#if UNITY_EDITOR
+
+using System.Threading;
 using Cysharp.Threading.Tasks;
+using UniMasterLinker.Util;
 using UnityEditor;
 
 namespace UniMasterLinker.Editor
@@ -22,3 +25,4 @@ namespace UniMasterLinker.Editor
         }
     }
 }
+#endif

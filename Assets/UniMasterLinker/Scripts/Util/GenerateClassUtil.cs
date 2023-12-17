@@ -1,25 +1,27 @@
-﻿#if UNITY_EDITOR
-
-using System.IO;
+﻿using System.IO;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
-namespace UniMasterLinker.Scripts.Util
+namespace UniMasterLinker.Util
 {
     /// <summary>
     ///    クラスの生成を行うUtilityクラス
     /// </summary>
     public class GenerateClassUtil
     {
+#if UNITY_EDITOR
+
         /// <summary>
         ///     スクリプトファイルを生成
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="content"></param>
         /// <param name="dataRootPath"></param>
-        public static void CreateScript(string fileName, string content,string dataRootPath)
+        public static void CreateScript(string fileName, string content, string dataRootPath)
         {
-            var createPath = Application.dataPath + "/" + dataRootPath +"/" + fileName + ".cs";
+            var createPath = Application.dataPath + "/" + dataRootPath + "/" + fileName + ".cs";
 
             using (var writer = new StreamWriter(createPath, false))
             {
@@ -28,6 +30,7 @@ namespace UniMasterLinker.Scripts.Util
 
             AssetDatabase.Refresh();
         }
+#endif
 
         /// <summary>
         /// 自動生成クラスファイルが存在するか
@@ -38,9 +41,8 @@ namespace UniMasterLinker.Scripts.Util
         /// <exception></exception>
         public static bool IsExistClass(string className, string dataRootPath)
         {
-            var path = Application.dataPath + "/" + dataRootPath +"/" + className + ".cs";
+            var path = Application.dataPath + dataRootPath + className + "DataObject" + ".cs";
             return File.Exists(path);
         }
     }
 }
-#endif

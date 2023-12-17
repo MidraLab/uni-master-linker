@@ -1,9 +1,9 @@
+#if UNITY_EDITOR
+
 using System.Collections.Generic;
 using System.Text;
-using UniMasterLinker.Scripts.Util;
-using UniMasterLinker.Util;
 
-namespace UniMasterLinker
+namespace UniMasterLinker.Util
 {
     /// <summary>
     ///     ゲームマスターのAPIクラスを更新するエディタ拡張
@@ -21,7 +21,7 @@ namespace UniMasterLinker
         /// </summary>
         /// <param name="paramJson"></param>
         /// <param name="fileName"></param>
-        private static void CreateParamAPIClassFile(string paramJson, string fileName)
+        public static void CreateParamAPIClassFile(string paramJson, string fileName)
         {
             var paramString = CreateParameterContents(paramJson);
             var scriptContent = CreateScriptContent(fileName, paramString);
@@ -40,9 +40,8 @@ namespace UniMasterLinker
 // このコードは自動生成されたものです。手動で編集しないでください。
 using System.Collections.Generic;
 using UnityEngine;
-using UniMasterLinker.API;
 
-namespace API
+namespace UniMasterLinker.API
 {{
     /// <summary>
     /// マスターデータから取得する際の{className}パラメータクラス
@@ -118,3 +117,4 @@ namespace API
         }
     }
 }
+#endif

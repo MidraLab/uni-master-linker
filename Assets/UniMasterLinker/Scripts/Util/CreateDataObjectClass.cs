@@ -1,4 +1,6 @@
-﻿namespace UniMasterLinker.Scripts.Util
+﻿#if UNITY_EDITOR
+
+namespace UniMasterLinker.Util
 {
     /// <summary>
     /// データオブジェクトのクラスを作成するクラス
@@ -60,7 +62,7 @@
         /// <returns></returns>
         private static string CreateDataObjectScriptContent(string className)
         {
-            return $@"using API;
+            return $@"using UniMasterLinker.API;
 using UnityEngine;
 
 namespace UniMasterLinker.DataObject
@@ -74,3 +76,4 @@ namespace UniMasterLinker.DataObject
         }
     }
 }
+#endif
