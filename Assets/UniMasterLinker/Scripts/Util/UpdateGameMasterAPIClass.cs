@@ -1,64 +1,31 @@
-﻿#if UNITY_EDITOR
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using UniMasterLinker.Util;
-using UnityEditor;
-using UnityEngine;
+#if UNITY_EDITOR
 
-namespace UniMasterLinker.Editor
+using System.Collections.Generic;
+using System.Text;
+
+namespace UniMasterLinker.Util
 {
     /// <summary>
     ///     ゲームマスターのAPIクラスを更新するエディタ拡張
     /// </summary>
-    public class UpdateGameMasterAPIClass : EditorWindow
+    public class UpdateGameMasterAPIClass
     {
+        /// <summary>
+        ///    APIクラスの作成パス
+        /// </summary>
         private const string DataRootPath = "/UniMasterLinker/Scripts/API/";
 
-        /// <summary>
-        ///     APIクラスの更新
-        /// </summary>
-        [MenuItem("UniMasterLinker/APIクラスの更新")]
-        private static async void UpdateAPIClassFile()
-        {
-            // 実装例
-            // var playerGameInfo = GoogleSheetUtil.GetGameInfo(Constant.Constant.GameMasterSheetURL,
-            //     Constant.Constant.PlayerSheetName);
-            //
-            // var (playerPramJson) =
-            //     await UniTask.WhenAll(playerGameInfo);
-            //
-            // // プレイヤーの初期パラメータAPIクラスを生成
-            // CreateParamAPIClassFile(playerPramJson, Constant.Constant.PlayerSheetName);
-        }
 
         /// <summary>
         /// パラメータのAPIクラスの作成
         /// </summary>
         /// <param name="paramJson"></param>
         /// <param name="fileName"></param>
-        private static void CreateParamAPIClassFile(string paramJson, string fileName)
+        public static void CreateParamAPIClassFile(string paramJson, string fileName)
         {
             var paramString = CreateParameterContents(paramJson);
             var scriptContent = CreateScriptContent(fileName, paramString);
-            CreateScript(fileName, scriptContent);
-        }
-
-        /// <summary>
-        ///     スクリプトファイルを生成
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="content"></param>
-        private static void CreateScript(string path, string content)
-        {
-            path = Application.dataPath + "/" + path;
-
-            using (var writer = new StreamWriter(path, false))
-            {
-                writer.WriteLine(content);
-            }
-
-            AssetDatabase.Refresh();
+            GenerateClassUtil.CreateScript(fileName, scriptContent, DataRootPath);
         }
 
         /// <summary>
@@ -74,7 +41,7 @@ namespace UniMasterLinker.Editor
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace API
+namespace UniMasterLinker.API
 {{
     /// <summary>
     /// マスターデータから取得する際の{className}パラメータクラス
@@ -118,7 +85,7 @@ namespace API
             IReadOnlyList<string> descriptions)
         {
             var parameterString = new StringBuilder();
-            
+
             for (var keyIndex = 0; keyIndex < keys.Count; keyIndex++)
             {
                 var key = keys[keyIndex];
@@ -136,7 +103,7 @@ namespace API
                 {
                     parameterString.Append(
                         $"\t\t{summaryString}        public {types[keyIndex]} " +
-                                           key + ";");
+                        key + ";");
                 }
                 else
                 {

@@ -12,6 +12,8 @@ UniMasterLinker is a Unity editor extension that synchronizes master data betwee
 
 Designed for game development in Unity, it offers management of master data and generation of API classes using pure C#.
 
+[日本語版ReadMeはこちら](README_JP.md)
+
 ## Import Method
 This library is provided as a UnityPackage. Download the latest `.unitypackage` file from [the release page](https://github.com/MidraLab/uni-master-liker/releases) and import it into your project.
 
