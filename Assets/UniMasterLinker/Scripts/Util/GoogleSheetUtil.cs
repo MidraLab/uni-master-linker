@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using UniMasterLinker.Extensions;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -21,10 +22,10 @@ namespace UniMasterLinker.Util
         /// <param name="sheetName"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async UniTask<T> GetGameInfo<T>(string url, string sheetName, CancellationToken token)
+        public static async Task<T> GetGameInfo<T>(string url, string sheetName, CancellationToken token)
         {
             var request = UnityWebRequest.Get($"{url}?sheetName={sheetName}");
-            await request.SendWebRequest().ToUniTask(cancellationToken: token);
+            await request.SendWebRequest();
             if (token.IsCancellationRequested)
             {
                 request.Abort();
@@ -52,24 +53,39 @@ namespace UniMasterLinker.Util
         /// <param name="sheetName"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public static async UniTask<string> GetGameInfo(string url, string sheetName,CancellationToken token)
+        public static async Task<string> GetGameInfo(string url, string sheetName, CancellationToken token)
         {
             var request = UnityWebRequest.Get($"{url}?sheetName={sheetName}");
-            await request.SendWebRequest().WithCancellation(token);
-            if (request.result is UnityWebRequest.Result.ConnectionError or UnityWebRequest.Result.ProtocolError
-                or UnityWebRequest.Result.DataProcessingError)
+
+            await using var registration = token.Register(() => request.Abort(), useSynchronizationContext: false);
+            await request.SendWebRequest();
+
+            if (token.IsCancellationRequested)
             {
-                Debug.Log("fail to get card info from google sheet");
+                // 操作がキャンセルされた場合
+                token.ThrowIfCancellationRequested();
+            }
+
+            if (request.result == UnityWebRequest.Result.ConnectionError
+                || request.result == UnityWebRequest.Result.ProtocolError
+                || request.result == UnityWebRequest.Result.DataProcessingError)
+            {
+                if (request.result == UnityWebRequest.Result.ConnectionError && request.error == "Request aborted")
+                {
+                    // リクエストがキャンセルされた場合
+                    token.ThrowIfCancellationRequested();
+                }
+
+                // その他のエラーを処理
+                Debug.LogError($"Googleシートからカード情報の取得に失敗しました: {request.error}");
+                return default;
             }
             else
             {
                 var json = request.downloadHandler.text;
-
-                Debug.Log($"data:{json}");
+                Debug.Log($"データ取得成功: {json}");
                 return json;
             }
-
-            return default;
         }
 
         /// <summary>
