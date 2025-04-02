@@ -69,7 +69,7 @@ namespace UniMasterLinker.Util
                 return json;
             }
 
-            return default;
+            return null;
         }
 
         /// <summary>
